@@ -31,15 +31,15 @@ def rankRoutes(population):
     return sorted(fitnessResults.items(), key = operator.itemgetter(1), reverse = True)
 
 
-def selection(popRanked, eliteSize):
+def selection(popRanked, fittestSize):
     selectionResults = []
     df = pd.DataFrame(np.array(popRanked), columns=["Index","Fitness"])
     df['cum_sum'] = df.Fitness.cumsum()
     df['cum_perc'] = 100*df.cum_sum/df.Fitness.sum()
     
-    for i in range(0, eliteSize):
+    for i in range(0, fittestSize):
         selectionResults.append(popRanked[i][0])
-    for i in range(0, len(popRanked) - eliteSize):
+    for i in range(0, len(popRanked) - fittestSize):
         pick = 100*random.random()
         for i in range(0, len(popRanked)):
             if pick <= df.iat[i,3]:
@@ -75,12 +75,12 @@ def breed(parent1, parent2):
     return child
 
 
-def breedPopulation(matingpool, eliteSize):
+def breedPopulation(matingpool, fittestSize):
     children = []
-    length = len(matingpool) - eliteSize
+    length = len(matingpool) - fittestSize
     pool = random.sample(matingpool, len(matingpool))
 
-    for i in range(0,eliteSize):
+    for i in range(0,fittestSize):
         children.append(matingpool[i])
     
     for i in range(0, length):
@@ -108,33 +108,33 @@ def mutatePopulation(population, mutationRate):
         mutatedPop.append(mutatedInd)
     return mutatedPop
 
-def nextGeneration(currentGen, eliteSize, mutationRate):
+def nextGeneration(currentGen, fittestSize, mutationRate):
     popRanked = rankRoutes(currentGen)
-    selectionResults = selection(popRanked, eliteSize)
+    selectionResults = selection(popRanked, fittestSize)
     matingpool = matingPool(currentGen, selectionResults)
-    children = breedPopulation(matingpool, eliteSize)
+    children = breedPopulation(matingpool, fittestSize)
     nextGeneration = mutatePopulation(children, mutationRate)
     return nextGeneration
 
-def geneticAlgorithm(population, popSize, eliteSize, mutationRate, generations):
+def geneticAlgorithm(population, popSize, fittestSize, mutationRate, generations):
     pop = initialPopulation(popSize, population)
     print("Initial distance: " + str(1 / rankRoutes(pop)[0][1]))
     
     for i in range(0, generations):
-        pop = nextGeneration(pop, eliteSize, mutationRate)
+        pop = nextGeneration(pop, fittestSize, mutationRate)
     
     print("Final distance: " + str(1 / rankRoutes(pop)[0][1]))
     bestRouteIndex = rankRoutes(pop)[0][0]
     bestRoute = pop[bestRouteIndex]
     return bestRoute
 
-def geneticAlgorithmPlot(population, popSize, eliteSize, mutationRate, generations):
+def geneticAlgorithmPlot(population, popSize, fittestSize, mutationRate, generations):
     pop = initialPopulation(popSize, population)
     progress = []
     progress.append(1 / rankRoutes(pop)[0][1])
     
     for i in range(0, generations):
-        pop = nextGeneration(pop, eliteSize, mutationRate)
+        pop = nextGeneration(pop, fittestSize, mutationRate)
         progress.append(1 / rankRoutes(pop)[0][1])
     
     plt.plot(progress)
@@ -150,6 +150,6 @@ cityList = []
 for i in range(0,25):
     cityList.append(City(x=int(random.random() * 200), y=int(random.random() * 200)))
 
-# geneticAlgorithm(population=cityList, popSize=100, eliteSize=20, mutationRate=0.01, generations=500)
-geneticAlgorithmPlot(population=cityList, popSize=100, eliteSize=20, mutationRate=0.01, generations=500)
+# geneticAlgorithm(population=cityList, popSize=100, fittestSize=20, mutationRate=0.01, generations=500)
+geneticAlgorithmPlot(population=cityList, popSize=100, fittestSize=20, mutationRate=0.01, generations=500)
 
