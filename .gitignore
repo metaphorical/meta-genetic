@@ -1,3 +1,4 @@
 tsvenv
+.idea
 
 */**/*.pyc
