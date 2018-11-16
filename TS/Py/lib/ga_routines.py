@@ -6,11 +6,26 @@ import numpy as np
 from fitness import Fitness
 
 def createRoute(cityList):
+    """
+    Creating random route around the cities
+
+    :param cityList:
+    :return route - randomized cityList:
+    """
     route = random.sample(cityList, len(cityList))
     return route
 
 
 def initialPopulation(popSize, cityList):
+    """
+    Setting up initial population of initial (random sample routes).
+
+    We take set of randomly created routes around cities so we can work our way towards most optimal solution.
+
+    :param popSize:
+    :param cityList:
+    :return population:
+    """
     population = []
 
     for i in range(0, popSize):
@@ -19,6 +34,13 @@ def initialPopulation(popSize, cityList):
 
 
 def rankRoutes(population):
+    """
+    Using individual fitness Class to rank routes
+    (in this case only indicator of route fitness is it's length)
+
+    :param population:
+    :return ranked population:
+    """
     fitnessResults = {}
     for i in range(0,len(population)):
         fitnessResults[i] = Fitness(population[i]).routeFitness()
@@ -26,6 +48,13 @@ def rankRoutes(population):
 
 
 def selection(popRanked, fittestSize):
+    """
+    We rank population and pick who survives the generation
+
+    :param popRanked:
+    :param fittestSize:
+    :return selectionResult - List of positions (indices) of surviving individuals:
+    """
     selectionResults = []
     df = pd.DataFrame(np.array(popRanked), columns=["Index","Fitness"])
     df['cum_sum'] = df.Fitness.cumsum()
@@ -43,11 +72,21 @@ def selection(popRanked, fittestSize):
 
 
 def matingPool(population, selectionResults):
+    """
+    Picking up list of selected individuals using selection results.
+    It is called mating pool, because these are individuals chosen to produce next generation.
+
+    TODO: This should probably move to selection so it can output List of individuals
+    :param population:
+    :param selectionResults:
+    :return matingPool:
+    """
     matingpool = []
     for i in range(0, len(selectionResults)):
         index = selectionResults[i]
         matingpool.append(population[index])
     return matingpool
+
 
 def breed(parent1, parent2):
     child = []
