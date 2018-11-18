@@ -89,9 +89,16 @@ def matingPool(population, selectionResults):
 
 
 def breed(parent1, parent2):
-    child = []
+    """
+    We can't splice and crossover without making sure that each gene is included only ones.
+    This is TS specific case since one city can be included in teh route exactly ones,
+    and each city has to be included.
+
+    :param parent1:
+    :param parent2:
+    :return breeding result (child, if you will):
+    """
     childP1 = []
-    childP2 = []
     
     geneA = int(random.random() * len(parent1))
     geneB = int(random.random() * len(parent1))
