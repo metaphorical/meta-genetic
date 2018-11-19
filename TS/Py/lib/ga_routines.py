@@ -116,6 +116,13 @@ def breed(parent1, parent2):
 
 
 def breedPopulation(matingpool, fittestSize):
+    """
+    Create next genertion.
+
+    :param matingpool:
+    :param fittestSize:
+    :return children:
+    """
     children = []
     length = len(matingpool) - fittestSize
     pool = random.sample(matingpool, len(matingpool))
@@ -129,6 +136,16 @@ def breedPopulation(matingpool, fittestSize):
     return children
 
 def mutate(individual, mutationRate):
+    """
+    Altho in some other cases this is also place of randomness,
+    we have rule of routes containing all the cities and just ones, so we can swap... basically.
+
+    This is done to make algorithm explore other local optimums (avoid convergence towards one)
+
+    :param individual:
+    :param mutationRate:
+    :return mutated individual:
+    """
     for swapped in range(len(individual)):
         if(random.random() < mutationRate):
             swapWith = int(random.random() * len(individual))
