@@ -76,7 +76,7 @@ def matingPool(population, selectionResults):
     Picking up list of selected individuals using selection results.
     It is called mating pool, because these are individuals chosen to produce next generation.
 
-    TODO: This should probably move to selection so it can output List of individuals
+    TODO: call to this should probably move to selection so it can output List of individuals
     :param population:
     :param selectionResults:
     :return matingPool:
@@ -117,7 +117,7 @@ def breed(parent1, parent2):
 
 def breedPopulation(matingpool, fittestSize):
     """
-    Create next genertion.
+    Create next generation.
 
     :param matingpool:
     :param fittestSize:
@@ -138,7 +138,7 @@ def breedPopulation(matingpool, fittestSize):
 def mutate(individual, mutationRate):
     """
     Altho in some other cases this is also place of randomness,
-    we have rule of routes containing all the cities and just ones, so we can swap... basically.
+    we have rule of routes containing all the cities and just ones, so we can basically only swap... randomly.
 
     This is done to make algorithm explore other local optimums (avoid convergence towards one)
 
